@@ -32,5 +32,5 @@ alertmanager:
             requests:
               storage: 2Gi
   # config はchartデフォルト(nullレシーバ)のまま。
-  # TODO: Slack通知を追加する場合は、ExternalSecret経由でVault(secret/alertmanager/slack)から
+  # TODO: Slack通知を追加する場合は、k8s Secret(alertmanager-slack等)から
   # webhook URLを注入し、alertmanager.config.receivers/route に追記する。

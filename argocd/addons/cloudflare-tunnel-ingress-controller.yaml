@@ -21,19 +21,6 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: cloudflare-tunnel-ingress-controller
-  ignoreDifferences:
-    - group: external-secrets.io
-      kind: ExternalSecret
-      jsonPointers:
-        - /spec/data/0/remoteRef/conversionStrategy
-        - /spec/data/0/remoteRef/decodingStrategy
-        - /spec/data/0/remoteRef/metadataPolicy
-        - /spec/data/1/remoteRef/conversionStrategy
-        - /spec/data/1/remoteRef/decodingStrategy
-        - /spec/data/1/remoteRef/metadataPolicy
-        - /spec/data/2/remoteRef/conversionStrategy
-        - /spec/data/2/remoteRef/decodingStrategy
-        - /spec/data/2/remoteRef/metadataPolicy
   syncPolicy:
     automated:
       prune: true
