@@ -45,6 +45,16 @@ mastodon:
         memory: 512Mi
       limits:
         memory: 1Gi  # cpu limit は設定しない(スロットリング回避)
+    # 3ノードに1台ずつ配置する(特定ノードにメモリが偏るのを防ぐ)
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: mastodon
+            app.kubernetes.io/instance: mastodon
+            app.kubernetes.io/component: web
 
   streaming:
     replicas: 3
@@ -54,6 +64,15 @@ mastodon:
         memory: 256Mi
       limits:
         memory: 512Mi
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: mastodon
+            app.kubernetes.io/instance: mastodon
+            app.kubernetes.io/component: streaming
 
   sidekiq:
     resources:
@@ -72,6 +91,15 @@ mastodon:
           - pull
           - mailers
           - ingress
+        topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: ScheduleAnyway
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: mastodon
+                app.kubernetes.io/instance: mastodon
+                app.kubernetes.io/component: sidekiq-default
       - name: scheduler
         replicas: 1
         concurrency: 5
