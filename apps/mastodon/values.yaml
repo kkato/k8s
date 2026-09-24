@@ -139,6 +139,10 @@ elasticsearch:
   port: 9200
   tls: false
   preset: small_cluster
+  # xpack.security.enabled: false で認証なし運用のため値は使われないが、
+  # chart が Secret 生成時に必須とするためダミー値を設定
+  username: elastic
+  password: placeholder
 
 # 自前 Redis (apps/mastodon/resources/redis.yaml)
 redis:
