@@ -2,11 +2,29 @@
 
 `social.kkato.app` で運用する個人用 Mastodon サーバー。
 
-- chart: [`mastodon/helm-charts`](https://github.com/mastodon/helm-charts) 0.5.6（appVersion v4.5.9）
+- chart: [`mastodon/helm-charts`](https://github.com/mastodon/helm-charts) 1.2.2（appVersion v4.7.2）
 - DB: CloudNative-PG（`mastodon-db`）
 - メディア: Cloudflare R2（S3 互換）
 - 登録: クローズ（シングルユーザー）
 - 全文検索: 有効化済み（自前 Elasticsearch, 3ノードクラスタ）
+
+## v4.6.6 → v4.7.2 の更新
+
+[v4.7.0](https://github.com/mastodon/mastodon/releases/tag/v4.7.0) と
+[v4.7.2](https://github.com/mastodon/mastodon/releases/tag/v4.7.2) の更新手順に従う。
+mainへのpushでArgoCDの自動syncが始まるため、事前にDBバックアップを取得する。
+4.7では大規模なDBマイグレーションがあり、データ量によっては長時間かかる。
+
+既存DBの更新では `mastodon.hooks.dbPrepare.enabled: false` とし、
+ArgoCDが `pre-install` hookの `db:prepare` を再実行することを防ぐ。
+`dbMigrate.enabled: true` により、以下の順序で実行される:
+
+1. `mastodon-db-pre-migrate`: 更新前のマイグレーション（`SKIP_POST_DEPLOYMENT_MIGRATIONS=true`）
+2. web / streaming / Sidekiqをv4.7.2へ更新
+3. `mastodon-db-migrate`: 更新後のマイグレーション
+
+sync完了後はArgoCDの `Synced` / `Healthy` と、各Deploymentのイメージを確認する。
+hook Jobは成功すると削除される。新規環境への初回導入時のみ `dbPrepare.enabled: true` に戻す。
 
 ## ディレクトリ構成
 
@@ -53,18 +71,18 @@ mastodon:
 gcloud secrets create mastodon-db-password --data-file=- <<< "<your-db-password>"
 
 # 2. SECRET_KEY_BASE
-SECRET_KEY_BASE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.5.9 bin/rails secret)
+SECRET_KEY_BASE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.2 bin/rails secret)
 gcloud secrets create mastodon-secret-key-base --data-file=- <<< "$SECRET_KEY_BASE"
 
 # 3. VAPID 鍵ペア
-VAPID=$(docker run --rm ghcr.io/mastodon/mastodon:v4.5.9 bin/rails mastodon:webpush:generate_vapid_key)
+VAPID=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.2 bin/rails mastodon:webpush:generate_vapid_key)
 VAPID_PRIVATE=$(echo "$VAPID" | grep VAPID_PRIVATE_KEY | cut -d= -f2)
 VAPID_PUBLIC=$(echo "$VAPID" | grep VAPID_PUBLIC_KEY | cut -d= -f2)
 gcloud secrets create mastodon-vapid-private-key --data-file=- <<< "$VAPID_PRIVATE"
 gcloud secrets create mastodon-vapid-public-key --data-file=- <<< "$VAPID_PUBLIC"
 
 # 4. ActiveRecord Encryption 鍵
-ARE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.5.9 bin/rails db:encryption:init)
+ARE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.2 bin/rails db:encryption:init)
 ARE_PRIMARY=$(echo "$ARE" | grep primary_key | awk '{print $2}')
 ARE_DETER=$(echo "$ARE" | grep deterministic_key | awk '{print $2}')
 ARE_SALT=$(echo "$ARE" | grep key_derivation_salt | awk '{print $2}')
