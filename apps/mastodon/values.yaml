@@ -1,8 +1,16 @@
-# Mastodon Helm chart (mastodon/helm-charts 1.1.3) values
+# Mastodon Helm chart (mastodon/helm-charts 1.2.2 / Mastodon v4.7.2) values
 # ドメイン・シングルユーザー運用設定
 mastodon:
   localDomain: social.kkato.app
   singleUserMode: true
+
+  # 既存DBの更新用。ArgoCDはpre-installも毎回実行するため、db:prepareを無効化する。
+  # 更新前/更新後のマイグレーションはdbMigrateのhookで分離して実行する。
+  hooks:
+    dbPrepare:
+      enabled: false
+    dbMigrate:
+      enabled: true
 
   # Cloudflare R2 メディアストレージ (S3 互換)
   s3:
