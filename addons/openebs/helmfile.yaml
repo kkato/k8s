@@ -7,6 +7,6 @@ releases:
     namespace: openebs
     createNamespace: true
     chart: openebs/openebs
-    version: 4.2.0
+    version: 4.6.1
     values:
       - values.yaml
