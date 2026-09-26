@@ -7,6 +7,6 @@ releases:
     namespace: cloudflare-tunnel-ingress-controller
     createNamespace: true
     chart: strrl.dev/cloudflare-tunnel-ingress-controller
-    version: 0.0.22
+    version: 0.1.0
     values:
       - values.yaml
