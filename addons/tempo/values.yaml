@@ -23,8 +23,8 @@ tempo:
   overrides:
     defaults:
       metrics_generator:
+        # Tempo 3.0 で local-blocks は廃止された。直近データの TraceQL メトリクスは live-store が扱う
         processors:
-          - local-blocks # TraceQLメトリクス(rate()等)のqueryRangeRecentに必須
           - span-metrics
           - service-graphs
 
