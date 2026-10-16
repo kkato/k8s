@@ -28,6 +28,8 @@ spec:
               value: "1"
             - name: CREATE_ADMIN
               value: "1"
+            - name: WEBAUTHN
+              value: "1"  # パスキーでのログインを有効化
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
