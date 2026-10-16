@@ -1,7 +1,25 @@
 ## ArgoCD custom values
 configs:
   cm:
-    accounts.admin: apiKey
+    url: https://argocd.kkato.app
+    # GitHub ログインのみにする（GitHub 側の二段階認証を使う）
+    admin.enabled: "false"
+    dex.config: |
+      connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            # kubectl create secret で手動作成（README 参照）
+            clientID: $argocd-github-oauth:clientID
+            clientSecret: $argocd-github-oauth:clientSecret
+            # ユーザーIDを GitHub のログイン名にする（RBAC で名前指定するため）
+            useLoginAsID: true
+  rbac:
+    # GitHub アカウントを持つ人なら誰でもログインはできるので、権限は名前指定した人だけに渡す
+    policy.default: ""
+    policy.csv: |
+      g, kkato, role:admin
 
 server:
   ingress:
