@@ -1,0 +1,17 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: miniflux-db
+  namespace: miniflux
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  instances: 1
+  # secret 未指定のため CNPG が miniflux-db-app Secret（key: uri）を自動生成する
+  bootstrap:
+    initdb:
+      database: miniflux
+      owner: miniflux
+  storage:
+    size: 5Gi
+    storageClass: openebs-hostpath

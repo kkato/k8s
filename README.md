@@ -7,9 +7,11 @@ Kubernetesクラスタのマニフェスト管理リポジトリ。ArgoCDによ�
 ```
 k8s/
 ├── apps/          # アプリケーション (Helm values + 素のK8sマニフェスト)
-│   └── mastodon/
-│       ├── values.yaml      # Helm values (ArgoCD ref: values で参照)
-│       └── resources/       # 素マニフェスト (CNPG Cluster, Redis, ExternalSecret 等)
+│   ├── mastodon/
+│   │   ├── values.yaml      # Helm values (ArgoCD ref: values で参照)
+│   │   └── resources/       # 素マニフェスト (CNPG Cluster, Redis, ExternalSecret 等)
+│   └── miniflux/            # RSS リーダー (素マニフェストのみ)
+│       └── resources/
 ├── addons/        # クラスタaddon (addonごとにディレクトリ)
 │   ├── argocd/
 │   ├── external-secrets/
