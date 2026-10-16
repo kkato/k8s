@@ -5,6 +5,7 @@
 - image: [`ghcr.io/miniflux/miniflux`](https://github.com/miniflux/v2) 2.3.3
 - DB: CloudNative-PG（`miniflux-db`、1 インスタンス）。接続情報は CNPG が自動生成する `miniflux-db-app` Secret を使う
 - 公開: Cloudflare Tunnel Ingress
+- ログイン: パスキー（WebAuthn）有効。ログイン後に設定画面から登録する
 
 ## デプロイ前の手動準備
 
