@@ -30,6 +30,22 @@ spec:
               value: "1"
             - name: WEBAUTHN
               value: "1"  # パスキーでのログインを有効化
+            # Google ログイン。新規ユーザー作成（OAUTH2_USER_CREATION）は無効のまま、既存ユーザーへの紐付けだけ許可する
+            - name: OAUTH2_PROVIDER
+              value: google
+            - name: OAUTH2_REDIRECT_URL
+              value: https://rss.kkato.app/oauth2/google/callback
+            # kubectl create secret で手動作成（README 参照）
+            - name: OAUTH2_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: miniflux-oauth2
+                  key: client-id
+            - name: OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: miniflux-oauth2
+                  key: client-secret
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
