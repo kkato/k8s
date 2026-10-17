@@ -4,11 +4,10 @@ metadata:
   name: radipod
   namespace: radipod
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: radipod
   ports:
     - name: http
       port: 80
       targetPort: http
-      nodePort: 30880

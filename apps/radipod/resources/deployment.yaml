@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: radipod
-          image: ghcr.io/kkato/radipod:465244784399e5fed5abd137381315ae4085d153
+          image: ghcr.io/kkato/radipod:e9219f88a5db90c522e98cbca589f8e2ff93e0af
           args: [run, -config, /etc/radipod/config.json]
           ports:
             - name: http
@@ -35,6 +35,16 @@ spec:
           env:
             - name: TZ
               value: Asia/Tokyo
+            - name: RADIPOD_HTTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: radipod-http-auth
+                  key: RADIPOD_HTTP_USER
+            - name: RADIPOD_HTTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: radipod-http-auth
+                  key: RADIPOD_HTTP_PASSWORD
           resources:
             requests:
               cpu: 50m
@@ -48,13 +58,11 @@ spec:
             capabilities:
               drop: [ALL]
           readinessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
             periodSeconds: 10
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
             initialDelaySeconds: 10
             periodSeconds: 30

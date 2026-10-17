@@ -8,7 +8,7 @@ data:
     {
       "data_dir": "/app/data",
       "listen": "0.0.0.0:8080",
-      "base_url": "http://192.168.10.112:30880",
+      "base_url": "https://radipod.kkato.app",
       "title": "安住紳一郎の日曜天国",
       "poll_interval": "30m",
       "lookback_days": 7,
