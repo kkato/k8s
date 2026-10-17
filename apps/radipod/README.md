@@ -3,6 +3,7 @@
 「安住紳一郎の日曜天国」を録音し、外出先のAntennaPodからストリーミング再生する。
 
 - RSS: `https://radipod.kkato.app/feed.xml`
+- 表示名は「radipod｜日曜天国」。専用カバーは `configmap.yaml` の `image_url` で指定する。
 - 起動時と30分ごとに過去7放送日を確認し、放送済みの未録音回を取得する。
 - 録音はPVC `radipod-data` に保存。Pod再作成でも残る。
 - Cloudflare TunnelによるHTTPS配信。RSSと音声の両方にBasic認証が必要。

@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: radipod
-          image: ghcr.io/kkato/radipod:e9219f88a5db90c522e98cbca589f8e2ff93e0af
+          image: ghcr.io/kkato/radipod:1e35840231ee044a5b5c870f326811347879f863
           args: [run, -config, /etc/radipod/config.json]
           ports:
             - name: http
