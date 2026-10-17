@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: radipod-config
+  namespace: radipod
+data:
+  config.json: |
+    {
+      "data_dir": "/app/data",
+      "listen": "0.0.0.0:8080",
+      "base_url": "http://192.168.10.112:30880",
+      "title": "安住紳一郎の日曜天国",
+      "poll_interval": "30m",
+      "lookback_days": 7,
+      "record_timeout": "30m",
+      "rules": [{ "station": "TBS", "match": "日曜天国" }]
+    }

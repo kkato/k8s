@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radipod
+  namespace: radipod
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: radipod
+  template:
+    metadata:
+      labels:
+        app: radipod
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: radipod
+          image: ghcr.io/kkato/radipod:465244784399e5fed5abd137381315ae4085d153
+          args: [run, -config, /etc/radipod/config.json]
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: TZ
+              value: Asia/Tokyo
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          volumeMounts:
+            - name: config
+              mountPath: /etc/radipod
+              readOnly: true
+            - name: data
+              mountPath: /app/data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: config
+          configMap:
+            name: radipod-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: radipod-data
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi
