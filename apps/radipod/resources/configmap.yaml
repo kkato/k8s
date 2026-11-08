@@ -10,7 +10,7 @@ data:
       "listen": "0.0.0.0:8080",
       "base_url": "https://radipod.kkato.app",
       "title": "radipod｜日曜天国",
-      "image_url": "https://raw.githubusercontent.com/kkato/radipod/1e35840231ee044a5b5c870f326811347879f863/assets/radipod-cover-v1.png",
+      "image_url": "https://megaphone.imgix.net/podcasts/b15dd10e-dcc7-11ed-aff8-53dfe2b74109/image/07a248e9063822af458a022fc0f4d9a6.jpg?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
       "poll_interval": "30m",
       "lookback_days": 7,
       "record_timeout": "30m",
