@@ -1,4 +1,4 @@
-# Mastodon Helm chart (mastodon/helm-charts 1.2.2 / Mastodon v4.7.2) values
+# Mastodon Helm chart (mastodon/helm-charts 1.2.8 / Mastodon v4.7.5) values
 # ドメイン・シングルユーザー運用設定
 mastodon:
   localDomain: social.kkato.app

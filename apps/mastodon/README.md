@@ -2,7 +2,7 @@
 
 `social.kkato.app` で運用する個人用 Mastodon サーバー。
 
-- chart: [`mastodon/helm-charts`](https://github.com/mastodon/helm-charts) 1.2.2（appVersion v4.7.2）
+- chart: [`mastodon/helm-charts`](https://github.com/mastodon/helm-charts) 1.2.8（appVersion v4.7.5）
 - DB: CloudNative-PG（`mastodon-db`）
 - メディア: Cloudflare R2（S3 互換）
 - 登録: クローズ（シングルユーザー）
@@ -71,18 +71,18 @@ mastodon:
 gcloud secrets create mastodon-db-password --data-file=- <<< "<your-db-password>"
 
 # 2. SECRET_KEY_BASE
-SECRET_KEY_BASE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.2 bin/rails secret)
+SECRET_KEY_BASE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.5 bin/rails secret)
 gcloud secrets create mastodon-secret-key-base --data-file=- <<< "$SECRET_KEY_BASE"
 
 # 3. VAPID 鍵ペア
-VAPID=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.2 bin/rails mastodon:webpush:generate_vapid_key)
+VAPID=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.5 bin/rails mastodon:webpush:generate_vapid_key)
 VAPID_PRIVATE=$(echo "$VAPID" | grep VAPID_PRIVATE_KEY | cut -d= -f2)
 VAPID_PUBLIC=$(echo "$VAPID" | grep VAPID_PUBLIC_KEY | cut -d= -f2)
 gcloud secrets create mastodon-vapid-private-key --data-file=- <<< "$VAPID_PRIVATE"
 gcloud secrets create mastodon-vapid-public-key --data-file=- <<< "$VAPID_PUBLIC"
 
 # 4. ActiveRecord Encryption 鍵
-ARE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.2 bin/rails db:encryption:init)
+ARE=$(docker run --rm ghcr.io/mastodon/mastodon:v4.7.5 bin/rails db:encryption:init)
 ARE_PRIMARY=$(echo "$ARE" | grep primary_key | awk '{print $2}')
 ARE_DETER=$(echo "$ARE" | grep deterministic_key | awk '{print $2}')
 ARE_SALT=$(echo "$ARE" | grep key_derivation_salt | awk '{print $2}')
